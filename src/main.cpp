@@ -95,13 +95,12 @@ void initMAC(void) {
 
   Serial.print("My MAC: ");
   printMAC(my_mac);
-  Serial.print("Sending to MAC: ");
+  Serial.print("I will send to MAC: ");
   printMAC(mac_to_send);
 }
 
 // Callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success"
                                                 : "Delivery Fail");
 }
@@ -196,7 +195,10 @@ void loop() {
     data_to_send.value_3--;
     data_to_send.value_4++;
 
-    Serial.println("Sending: ");
+    Serial.println();
+    Serial.print("Sending to: ");
+    printMAC(mac_to_send);
+
     printExchangeData(data_to_send);
 
     // Send message via ESP-NOW
@@ -213,7 +215,8 @@ void loop() {
   if (getEvent(&event, 0)) {
     int64_t now = esp_timer_get_time();
 
-    Serial.print("From: ");
+    Serial.println();
+    Serial.print("Received from: ");
     printMAC(event.from);
 
     Serial.print("Delay: ");
